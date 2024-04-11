@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file:
+        db/changelog/schema/changelog-procedure.xml
+        db/changelog/schema/changelog-table.xml
