@@ -1,5 +1,7 @@
 databaseChangeLog:
   - include:
-      file:
-        db/changelog/schema/changelog-procedure.xml
-        db/changelog/schema/changelog-table.xml
+      file: /schema/changelog-procedure.xml
+      relativeToChangelogFile: true
+  - include:
+      file: /schema/changelog-table.xml
+      relativeToChangelogFile: true
