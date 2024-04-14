@@ -4,7 +4,31 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="0" author="admin">
-
+    <changeSet id="101" author="yfp">
+        <createTable tableName="user">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="user_id_pk" nullable="false" />
+            </column>
+            <column name="first_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createProcedure>
+            CREATE TRIGGER tr_add_creation_date_user
+                BEFORE INSERT ON "user"
+                FOR EACH ROW EXECUTE FUNCTION add_creation_date();
+        </createProcedure>
     </changeSet>
 </databaseChangeLog>
