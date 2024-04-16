@@ -1,6 +1,6 @@
-package com.example.backend.auth.persistence;
+package com.example.backend.security.auth.persistence;
 
-import com.example.backend.auth.domain.UserAuthentication;
+import com.example.backend.security.auth.domain.UserAuthentication;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

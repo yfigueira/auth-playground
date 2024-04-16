@@ -1,4 +1,4 @@
-package com.example.backend.auth.persistence;
+package com.example.backend.security.auth.persistence;
 
 import org.springframework.data.repository.CrudRepository;
 

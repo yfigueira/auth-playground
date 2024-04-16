@@ -1,7 +1,7 @@
-package com.example.backend.auth.persistence;
+package com.example.backend.security.auth.persistence;
 
-import com.example.backend.auth.domain.UserAuthentication;
-import com.example.backend.auth.domain.UserAuthenticationRepository;
+import com.example.backend.security.auth.domain.UserAuthentication;
+import com.example.backend.security.auth.domain.UserAuthenticationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
