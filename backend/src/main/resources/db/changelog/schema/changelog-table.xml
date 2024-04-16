@@ -5,7 +5,7 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="101" author="yfp">
-        <createTable tableName="user">
+        <createTable tableName="app_user">
             <column name="id" type="uuid">
                 <constraints primaryKey="true" primaryKeyName="user_id_pk" nullable="false" />
             </column>
@@ -27,7 +27,7 @@
         </createTable>
         <createProcedure>
             CREATE TRIGGER tr_add_creation_date_user
-                BEFORE INSERT ON "user"
+                BEFORE INSERT ON app_user
                 FOR EACH ROW EXECUTE FUNCTION add_creation_date();
         </createProcedure>
     </changeSet>
