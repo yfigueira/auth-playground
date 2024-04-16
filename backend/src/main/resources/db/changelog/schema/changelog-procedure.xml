@@ -4,7 +4,16 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="0" author="admin">
-
+    <changeSet id="1" author="yfp">
+        <createProcedure>
+            CREATE OR REPLACE FUNCTION add_creation_date()
+            RETURNS TRIGGER AS $$
+            BEGIN
+                NEW.created_at := CURRENT_TIMESTAMP;
+            RETURN NEW;
+            END;
+            $$
+            LANGUAGE plpgsql;
+        </createProcedure>
     </changeSet>
 </databaseChangeLog>
