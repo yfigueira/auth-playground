@@ -1,6 +1,5 @@
 package com.example.backend.security.auth.config;
 
-import com.example.backend.security.auth.domain.UserAuthenticationRepository;
 import com.example.backend.security.auth.domain.UserAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class AuthenticationConfig {
 
-    private final UserAuthenticationRepository repository;
+    private final UserAuthenticationService userAuthenticationService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -37,7 +36,7 @@ public class AuthenticationConfig {
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers("/users/public").permitAll()
                         .anyRequest().authenticated())
-                .userDetailsService(userAuthenticationService())
+                .userDetailsService(userAuthenticationService)
                 .httpBasic(Customizer.withDefaults())
                 .build();
     }
@@ -53,10 +52,5 @@ public class AuthenticationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserAuthenticationService userAuthenticationService() {
-        return new UserAuthenticationService(repository);
     }
 }
