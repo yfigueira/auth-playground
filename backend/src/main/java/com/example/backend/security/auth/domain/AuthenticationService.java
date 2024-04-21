@@ -1,6 +1,6 @@
 package com.example.backend.security.auth.domain;
 
-import com.example.backend.security.auth.web.dto.LoginRequest;
+import com.example.backend.security.auth.web.dto.LoginResponseDto;
 import com.example.backend.security.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,13 +16,14 @@ public class AuthenticationService {
 
     private final JwtService jwtService;
 
-    public String authenticate(LoginRequest request) {
+    public LoginResponse authenticate(LoginRequest request) {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(
                         request.username(),
                         request.password()
                 ));
 
-        return jwtService.generateToken(authentication);
+        var token = jwtService.generateToken(authentication);
+        return new LoginResponse(token);
     }
 }

@@ -1,8 +1,8 @@
 package com.example.backend.security.auth.web;
 
 import com.example.backend.security.auth.domain.AuthenticationService;
-import com.example.backend.security.auth.web.dto.LoginRequest;
-import com.example.backend.security.auth.web.dto.LoginResponse;
+import com.example.backend.security.auth.web.dto.LoginRequestDto;
+import com.example.backend.security.auth.web.dto.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +17,9 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/login/username-password")
-    public LoginResponse loginUsernamePassword(@RequestBody LoginRequest request) {
+    public LoginResponseDto loginUsernamePassword(@RequestBody LoginRequestDto dto) {
+        var request = LoginRequestDto.mapper().toDomain(dto);
         var response = service.authenticate(request);
-        return new LoginResponse(response);
+        return LoginResponseDto.mapper().toDto(response);
     }
 }
