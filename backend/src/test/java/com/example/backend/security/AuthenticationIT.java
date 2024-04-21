@@ -64,14 +64,7 @@ public class AuthenticationIT {
 
     @Test
     void whenRegistered_AuthenticationShouldReturnTokenWithStatus200() {
-        User user = User.builder()
-                .firstName("John")
-                .lastName("Smith")
-                .email("jsmith@email.com")
-                .password(encoder.encode("pass"))
-                .build();
-
-        userRepository.save(user);
+        populateDatabase();
 
         String requestBody = """
                 {
@@ -91,5 +84,64 @@ public class AuthenticationIT {
                 .body("token", notNullValue())
                 .body("size()", is(1));
 
+    }
+
+    @Test
+    void whenNotRegistered_AuthenticationShouldReturnUnauthorizedErrorMessageWithStatus401() {
+        String requestBody = """
+                {
+                    "username": "-",
+                    "password": "-"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("%s/%s".formatted(BASE_PATH, "login/username-password"))
+                .then()
+                .statusCode(401)
+                .body("size()", is(3))
+                .body("status", notNullValue())
+                .body("causedBy", notNullValue())
+                .body("timestamp", notNullValue());
+    }
+
+    @Test
+    void whenProvidingWrongPassword_AuthenticationShouldReturnUnauthorizedErrorMessageWithStatus401() {
+        populateDatabase();
+
+        String requestBody = """
+                {
+                    "username": "jsmith@email.com",
+                    "password": "wrong-password"
+                }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("%s/%s".formatted(BASE_PATH, "login/username-password"))
+                .then()
+                .statusCode(401)
+                .body("size()", is(3))
+                .body("status", notNullValue())
+                .body("causedBy", notNullValue())
+                .body("timestamp", notNullValue());
+    }
+
+    private void populateDatabase() {
+        User user = User.builder()
+                .firstName("John")
+                .lastName("Smith")
+                .email("jsmith@email.com")
+                .password(encoder.encode("pass"))
+                .build();
+
+        userRepository.save(user);
     }
 }
