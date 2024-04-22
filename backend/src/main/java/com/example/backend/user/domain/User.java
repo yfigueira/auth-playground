@@ -9,7 +9,6 @@ public record User(
         UUID id,
         String firstName,
         String lastName,
-        String email,
-        String password
+        String email
 ) {
 }

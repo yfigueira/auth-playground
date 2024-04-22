@@ -1,6 +1,5 @@
 package com.example.backend.user.persistence;
 
-import com.example.backend.user.domain.User;
 import com.example.backend.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,9 +12,4 @@ public class UserDatabaseRepository implements UserRepository {
 
     private final UserMapper mapper;
 
-    @Override
-    public User save(User user) {
-        var saved = entityRepository.save(mapper.toEntity(user));
-        return mapper.toDomain(saved);
-    }
 }

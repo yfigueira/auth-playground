@@ -1,8 +1,8 @@
 package com.example.backend.security;
 
-import com.example.backend.user.domain.User;
-import com.example.backend.user.domain.UserRepository;
-import com.example.backend.user.persistence.UserEntityRepository;
+import com.example.backend.security.auth.domain.UserRegistration;
+import com.example.backend.security.auth.domain.AuthenticationRepository;
+import com.example.backend.security.auth.persistence.UserRegistrationEntityRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
@@ -30,8 +30,8 @@ public class AuthenticationIT {
 
     @LocalServerPort
     private Integer port;
-    private final UserEntityRepository entityRepository;
-    private final UserRepository userRepository;
+    private final UserRegistrationEntityRepository registrationRepository;
+    private final AuthenticationRepository authenticationRepository;
     private final PasswordEncoder encoder;
     private static final String BASE_PATH = "/api/auth";
 
@@ -40,9 +40,9 @@ public class AuthenticationIT {
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16.0-alpine");
 
     @Autowired
-    public AuthenticationIT(UserEntityRepository repository, UserRepository userRepository, PasswordEncoder encoder) {
-        this.entityRepository = repository;
-        this.userRepository = userRepository;
+    public AuthenticationIT(UserRegistrationEntityRepository registrationRepository, AuthenticationRepository authenticationRepository, PasswordEncoder encoder) {
+        this.registrationRepository = registrationRepository;
+        this.authenticationRepository = authenticationRepository;
         this.encoder = encoder;
     }
 
@@ -53,13 +53,61 @@ public class AuthenticationIT {
 
     @AfterEach
     void tearDown() {
-        entityRepository.deleteAll();
+        registrationRepository.deleteAll();
     }
 
     @Test
     void postgresContainerLoads() {
         assertThat(postgres.isCreated(), is(true));
         assertThat(postgres.isRunning(), is(true));
+    }
+
+    @Test
+    void whenNotRegistered_RegistrationShouldReturnStatus200() {
+        String registration = """
+                    {
+                        "firstName": "John",
+                        "lastName": "Smith",
+                        "email": "jsmith@email.com",
+                        "password": "password",
+                        "repeatedPassword": "password"
+                    }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(registration)
+                .when()
+                .post("%s/register".formatted(BASE_PATH))
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void whenPasswordsDoNotMatch_RegistrationShouldReturnPasswordMismatchErrorMessageWithStatus409() {
+        String registration = """
+                    {
+                        "firstName": "John",
+                        "lastName": "Smith",
+                        "email": "jsmith@email.com",
+                        "password": "password",
+                        "repeatedPassword": "other-password"
+                    }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(registration)
+                .when()
+                .post("%s/register".formatted(BASE_PATH))
+                .then()
+                .statusCode(409)
+                .body("size()", is(3))
+                .body("status", notNullValue())
+                .body("causedBy", notNullValue())
+                .body("timestamp", notNullValue());
     }
 
     @Test
@@ -78,7 +126,7 @@ public class AuthenticationIT {
                 .and()
                 .body(requestBody)
                 .when()
-                .post("%s/%s".formatted(BASE_PATH, "login/username-password"))
+                .post("%s/login/username-password".formatted(BASE_PATH))
                 .then()
                 .statusCode(200)
                 .body("token", notNullValue())
@@ -135,13 +183,13 @@ public class AuthenticationIT {
     }
 
     private void populateDatabase() {
-        User user = User.builder()
+        UserRegistration userRegistration = UserRegistration.builder()
                 .firstName("John")
                 .lastName("Smith")
                 .email("jsmith@email.com")
                 .password(encoder.encode("pass"))
                 .build();
 
-        userRepository.save(user);
+        authenticationRepository.save(userRegistration);
     }
 }

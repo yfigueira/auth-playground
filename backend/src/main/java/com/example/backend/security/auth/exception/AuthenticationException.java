@@ -11,4 +11,8 @@ public class AuthenticationException extends RuntimeException{
     public static UsernameNotFoundException notFound(String username) {
         return new UsernameNotFoundException("%s not found".formatted(username));
     }
+
+    public static AuthenticationException passwordMismatch() {
+        return new AuthenticationException("Password mismatch");
+    }
 }

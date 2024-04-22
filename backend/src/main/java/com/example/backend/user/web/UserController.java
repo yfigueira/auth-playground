@@ -1,9 +1,7 @@
 package com.example.backend.user.web;
 
 import com.example.backend.user.domain.UserService;
-import com.example.backend.user.web.dto.UserRegistrationDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,12 +20,5 @@ public class UserController {
     @GetMapping("/private")
     public String privateGreeting() {
         return "Hello authenticated user";
-    }
-
-    @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody UserRegistrationDto dto) {
-        var registration = UserRegistrationDto.mapper().toDomain(dto);
-        userService.create(registration);
-        return ResponseEntity.ok().build();
     }
 }

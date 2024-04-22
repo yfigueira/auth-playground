@@ -1,4 +1,4 @@
-package com.example.backend.user.persistence;
+package com.example.backend.security.auth.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Table(name = "app_user")
-public class UserEntity {
+public class UserRegistrationEntity {
 
     @Id
     @UuidGenerator
@@ -29,4 +29,7 @@ public class UserEntity {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "password")
+    private String password;
 }

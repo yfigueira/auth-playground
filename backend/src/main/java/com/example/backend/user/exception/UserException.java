@@ -6,7 +6,4 @@ public class UserException extends RuntimeException {
         super(message);
     }
 
-    public static UserException passwordMismatch() {
-        return new UserException("Password mismatch");
-    }
 }
