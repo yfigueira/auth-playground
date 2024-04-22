@@ -85,7 +85,7 @@ public class AuthenticationIT {
     }
 
     @Test
-    void whenPasswordsDoNotMatch_RegistrationShouldReturnPasswordMismatchErrorMessageWithStatus409() {
+    void whenPasswordsDoNotMatch_RegistrationShouldReturnPasswordMismatchErrorMessageWithStatus400() {
         String registration = """
                     {
                         "firstName": "John",
@@ -103,7 +103,7 @@ public class AuthenticationIT {
                 .when()
                 .post("%s/register".formatted(BASE_PATH))
                 .then()
-                .statusCode(409)
+                .statusCode(400)
                 .body("size()", is(3))
                 .body("status", notNullValue())
                 .body("causedBy", notNullValue())

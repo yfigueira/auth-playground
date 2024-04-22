@@ -19,6 +19,6 @@ public class AuthenticationControllerAdvice {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handlePasswordMismatch(AuthenticationException exception) {
-        return Exception.handle(HttpStatus.CONFLICT, exception.getMessage());
+        return Exception.handle(HttpStatus.BAD_REQUEST, exception.getMessage());
     }
 }
