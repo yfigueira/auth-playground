@@ -17,6 +17,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @Testcontainers
@@ -55,7 +56,7 @@ public class UserIT {
     }
 
     @Test
-    void whenNotRegistered_RegistrationShouldReturnStatusOk200() {
+    void whenNotRegistered_RegistrationShouldReturnStatus200() {
         String registration = """
                     {
                         "firstName": "John",
@@ -74,5 +75,31 @@ public class UserIT {
                 .post(BASE_PATH)
                 .then()
                 .statusCode(200);
+    }
+
+    @Test
+    void whenPasswordsDoNotMatch_RegistrationShouldReturnPasswordMismatchErrorMessageWithStatus409() {
+        String registration = """
+                    {
+                        "firstName": "John",
+                        "lastName": "Smith",
+                        "email": "jsmith@email.com",
+                        "password": "password",
+                        "repeatedPassword": "other-password"
+                    }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(registration)
+                .when()
+                .post(BASE_PATH)
+                .then()
+                .statusCode(409)
+                .body("size()", is(3))
+                .body("status", notNullValue())
+                .body("causedBy", notNullValue())
+                .body("timestamp", notNullValue());
     }
 }

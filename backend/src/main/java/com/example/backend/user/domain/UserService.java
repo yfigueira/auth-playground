@@ -1,5 +1,6 @@
 package com.example.backend.user.domain;
 
+import com.example.backend.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -10,10 +11,9 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
-    public User create(UserRegistration registration) {
-        if (!registration.password()
-                .equals(registration.repeatedPassword())) {
-            throw new RuntimeException();
+    public void create(UserRegistration registration) {
+        if (!registration.password().equals(registration.repeatedPassword())) {
+            throw UserException.passwordMismatch();
         }
 
         var user = User.builder()
@@ -23,6 +23,6 @@ public class UserService {
                 .password(encoder.encode(registration.password()))
                 .build();
 
-        return repository.save(user);
+        repository.save(user);
     }
 }
