@@ -13,7 +13,7 @@ public record LoginRequestDto(
         LoginRequest toDomain(LoginRequestDto dto);
     }
 
-    public static LoginRequestDto.LoginRequestMapper mapper() {
+    public static LoginRequestMapper mapper() {
         return Mappers.getMapper(LoginRequestDto.LoginRequestMapper.class);
     }
 }

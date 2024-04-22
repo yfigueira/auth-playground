@@ -10,12 +10,17 @@ public class UserService {
 
     private final PasswordEncoder encoder;
 
-    public User create(UserRegistration userRegistration) {
+    public User create(UserRegistration registration) {
+        if (!registration.password()
+                .equals(registration.repeatedPassword())) {
+            throw new RuntimeException();
+        }
+
         var user = User.builder()
-                .firstName(userRegistration.firstName())
-                .lastName(userRegistration.lastName())
-                .email(userRegistration.email())
-                .password(encoder.encode(userRegistration.password()))
+                .firstName(registration.firstName())
+                .lastName(registration.lastName())
+                .email(registration.email())
+                .password(encoder.encode(registration.password()))
                 .build();
 
         return repository.save(user);

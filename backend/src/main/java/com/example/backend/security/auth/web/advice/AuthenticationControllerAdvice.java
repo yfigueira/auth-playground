@@ -21,7 +21,7 @@ public class AuthenticationControllerAdvice {
 
     private ResponseEntity<ErrorResponse> handle(HttpStatus status, String message) {
         var errorResponse = ErrorResponse.builder()
-                .status(status.toString())
+                .status(status)
                 .causedBy(message)
                 .timestamp(LocalDateTime.now())
                 .build();

@@ -1,10 +1,9 @@
 package com.example.backend.user.web;
 
-import com.example.backend.user.domain.User;
-import com.example.backend.user.domain.UserRegistration;
 import com.example.backend.user.domain.UserService;
 import com.example.backend.user.web.dto.UserRegistrationDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,14 +25,9 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserRegistrationDto dto) {
-        var user = UserRegistration.builder()
-                .firstName(dto.firstName())
-                .lastName(dto.lastName())
-                .email(dto.email())
-                .password(dto.password())
-                .build();
-
-        return userService.create(user);
+    public ResponseEntity<?> createUser(@RequestBody UserRegistrationDto dto) {
+        var registration = UserRegistrationDto.mapper().toDomain(dto);
+        userService.create(registration);
+        return ResponseEntity.ok().build();
     }
 }

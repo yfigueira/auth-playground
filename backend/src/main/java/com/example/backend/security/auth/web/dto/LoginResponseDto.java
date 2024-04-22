@@ -13,7 +13,7 @@ public record LoginResponseDto(
         LoginResponseDto toDto(LoginResponse domain);
     }
 
-    public static LoginResponseDto.LoginResponseMapper mapper() {
+    public static LoginResponseMapper mapper() {
         return Mappers.getMapper(LoginResponseDto.LoginResponseMapper.class);
     }
 }
