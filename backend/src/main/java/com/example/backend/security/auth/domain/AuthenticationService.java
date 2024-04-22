@@ -33,6 +33,11 @@ public class AuthenticationService {
     }
 
     public void create(RegistrationRequest request) {
+        var email = request.email();
+
+        if (repository.findByUsername(email).isPresent()) {
+            throw AuthenticationException.usernameConflict(email);
+        }
         if (!request.password().equals(request.repeatedPassword())) {
             throw AuthenticationException.passwordMismatch();
         }

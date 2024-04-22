@@ -111,6 +111,34 @@ public class AuthenticationIT {
     }
 
     @Test
+    void whenUsernameAlreadyExists_RegistrationShouldReturnUsernameConflictErrorMessageWithStatus409() {
+        populateDatabase();
+
+        String registration = """
+                    {
+                        "firstName": "John",
+                        "lastName": "Smith",
+                        "email": "jsmith@email.com",
+                        "password": "password",
+                        "repeatedPassword": "password"
+                    }
+                """;
+
+        given()
+                .contentType(ContentType.JSON)
+                .and()
+                .body(registration)
+                .when()
+                .post("%s/register".formatted(BASE_PATH))
+                .then()
+                .statusCode(409)
+                .body("size()", is(3))
+                .body("status", notNullValue())
+                .body("causedBy", notNullValue())
+                .body("timestamp", notNullValue());
+    }
+
+    @Test
     void whenRegistered_AuthenticationShouldReturnTokenWithStatus200() {
         populateDatabase();
 

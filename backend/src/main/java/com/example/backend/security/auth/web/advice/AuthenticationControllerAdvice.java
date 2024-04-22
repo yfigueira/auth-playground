@@ -17,8 +17,13 @@ public class AuthenticationControllerAdvice {
         return Exception.handle(HttpStatus.UNAUTHORIZED, exception.getMessage());
     }
 
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handlePasswordMismatch(AuthenticationException exception) {
+    @ExceptionHandler(AuthenticationException.PasswordMismatchException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordMismatch(AuthenticationException.PasswordMismatchException exception) {
         return Exception.handle(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.UsernameConflictException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameConflict(AuthenticationException.UsernameConflictException exception) {
+        return Exception.handle(HttpStatus.CONFLICT, exception.getMessage());
     }
 }
