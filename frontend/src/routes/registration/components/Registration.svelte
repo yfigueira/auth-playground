@@ -1,7 +1,9 @@
 <script lang="ts">
     import Input from "$lib/form-elements/Input.svelte";
-    import type {RegistrationForm} from "$lib/model/registration-form";
+    import type { RegistrationForm } from "$lib/model/registration-form";
     import Button from "$lib/form-elements/Button.svelte";
+    import { ALERT_TYPE, displayAlert } from "../../../stores/alertStore";
+    import { goto } from '$app/navigation';
 
     export let formData: RegistrationForm;
 
@@ -11,16 +13,30 @@
     let firstNameValid: boolean = true;
     let lastNameValid: boolean = true;
 
-    function handleSubmit(): void {
+    async function handleSubmit(): void {
         validateEmail();
         validatePassword();
         validateFirstName();
         validateLastName();
 
         if (!passwordValid || !passwordMatch || !emailValid || !firstNameValid || !lastNameValid) {
-            console.error("Invalid data")
+            return;
         } else {
-            console.log(formData);
+            const response = await fetch("http://localhost:8080/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                let errorResponse = await response.json();
+                displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
+            } else {
+                displayAlert("Registration successful", ALERT_TYPE.SUCCESS);
+                await goto('/login');
+            }
         }
     }
 
