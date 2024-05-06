@@ -1,9 +1,10 @@
 <script lang="ts">
-    import Input from "$lib/form-elements/Input.svelte";
-    import type { RegistrationForm } from "$lib/model/registration-form";
-    import Button from "$lib/form-elements/Button.svelte";
-    import { ALERT_TYPE, displayAlert } from "../../../stores/alertStore";
     import { goto } from '$app/navigation';
+    import { post } from "$lib/api";
+    import type { RegistrationForm } from "$lib/model/registration-form";
+    import { ALERT_TYPE, displayAlert } from "../../../stores/alertStore";
+    import Input from "$lib/form-elements/Input.svelte";
+    import Button from "$lib/form-elements/Button.svelte";
 
     export let formData: RegistrationForm;
 
@@ -13,7 +14,7 @@
     let firstNameValid: boolean = true;
     let lastNameValid: boolean = true;
 
-    async function handleSubmit(): void {
+    function handleSubmit(): void {
         validateEmail();
         validatePassword();
         validateFirstName();
@@ -21,22 +22,16 @@
 
         if (!passwordValid || !passwordMatch || !emailValid || !firstNameValid || !lastNameValid) {
             return;
-        } else {
-            const response = await fetch("http://localhost:8080/api/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
+        }
 
-            if (!response.ok) {
-                let errorResponse = await response.json();
-                displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
-            } else {
-                displayAlert("Registration successful", ALERT_TYPE.SUCCESS);
-                await goto('/login');
-            }
+        const response = await post("auth/register", formData);
+
+        if (!response.ok) {
+            let errorResponse = await response.json();
+            displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
+        } else {
+            displayAlert("Registration successful", ALERT_TYPE.SUCCESS);
+            await goto('/login');
         }
     }
 
