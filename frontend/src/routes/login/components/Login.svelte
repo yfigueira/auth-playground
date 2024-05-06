@@ -1,29 +1,39 @@
 <script lang="ts">
     import type { LoginForm } from "$lib/model/login-form";
+    import { post } from "$lib/api";
     import Input from "$lib/form-elements/Input.svelte";
     import Button from "$lib/form-elements/Button.svelte";
+    import {ALERT_TYPE, displayAlert} from "../../../stores/alertStore";
+    import {goto} from "$app/navigation";
 
     export let formData: LoginForm;
 
     let emailValid: boolean = true;
     let passwordValid: boolean = true;
 
-    function handleSubmit() {
+    async function handleSubmit() {
         validateEmail();
         validatePassword();
 
         if (!emailValid || !passwordValid) {
             return;
+        }
+
+        const response = await post("auth/login/username-password", formData);
+
+        if (!response.ok) {
+            let errorResponse = await response.json();
+            displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
-            console.log(formData)
+            await goto('/home');
         }
     }
 
     function validateEmail(): void {
         let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        emailValid = formData.email !== ''
-            && emailPattern.test(formData.email);
+        emailValid = formData.username !== ''
+            && emailPattern.test(formData.username);
     }
 
     function validatePassword(): void {
@@ -36,7 +46,7 @@
       on:submit|preventDefault={handleSubmit}>
     <Input label="Email"
            id="email"
-           bind:value={formData.email}
+           bind:value={formData.username}
            error={emailValid ? null : "Wrong format"}
            on:change={validateEmail}/>
     <Input label="Password"

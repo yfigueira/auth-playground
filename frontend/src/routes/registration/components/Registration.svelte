@@ -14,7 +14,7 @@
     let firstNameValid: boolean = true;
     let lastNameValid: boolean = true;
 
-    function handleSubmit(): void {
+    async function handleSubmit(): void {
         validateEmail();
         validatePassword();
         validateFirstName();
