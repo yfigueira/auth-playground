@@ -22,10 +22,10 @@
         const response = await post("auth/login/username-password", formData);
 
         if (!response.ok) {
-            let errorResponse = response.json();
+            let errorResponse = await response.json();
             displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
-            await goto('/home');
+            await goto('/');
         }
     }
 
@@ -51,6 +51,7 @@
            on:change={validateEmail}/>
     <Input label="Password"
            id="password"
+           type="password"
            bind:value={formData.password}
            error={passwordValid ? null : "Password required"}
            on:change={validatePassword}/>
