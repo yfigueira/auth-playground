@@ -20,11 +20,12 @@
         }
 
         const response = await post("auth/login/username-password", formData);
+        const responseBody = await response.json();
 
         if (!response.ok) {
-            let errorResponse = await response.json();
             displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
+            localStorage.setItem("token", responseBody.token);
             await goto('/');
         }
     }

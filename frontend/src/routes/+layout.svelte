@@ -2,6 +2,17 @@
     import "../app.css"
     import michael from "$lib/assets/Michael-Jackson.svg"
     import Alert from "./Alert.svelte";
+    import { onMount } from "svelte";
+    import { goto } from "$app/navigation";
+
+    let token: string = '';
+
+    onMount(async () => {
+        token = localStorage.getItem("token") || '';
+        if (token === '') {
+            await goto("/login");
+        }
+    });
 </script>
 
 <div class="flex flex-row h-screen w-screen">
