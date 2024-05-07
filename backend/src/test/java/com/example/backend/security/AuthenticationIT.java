@@ -79,7 +79,7 @@ public class AuthenticationIT {
                 .and()
                 .body(registration)
                 .when()
-                .post("%s/register".formatted(BASE_PATH))
+                .post("%s/registration".formatted(BASE_PATH))
                 .then()
                 .statusCode(200);
     }
@@ -101,7 +101,7 @@ public class AuthenticationIT {
                 .and()
                 .body(registration)
                 .when()
-                .post("%s/register".formatted(BASE_PATH))
+                .post("%s/registration".formatted(BASE_PATH))
                 .then()
                 .statusCode(400)
                 .body("size()", is(3))
@@ -129,7 +129,7 @@ public class AuthenticationIT {
                 .and()
                 .body(registration)
                 .when()
-                .post("%s/register".formatted(BASE_PATH))
+                .post("%s/registration".formatted(BASE_PATH))
                 .then()
                 .statusCode(409)
                 .body("size()", is(3))

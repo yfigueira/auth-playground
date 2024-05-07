@@ -24,10 +24,10 @@
             return;
         }
 
-        const response = await post("auth/register", formData);
+        const response = await post("auth/registration", formData);
 
         if (!response.ok) {
-            let errorResponse = await response.json();
+            let errorResponse = response.json();
             displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
             displayAlert("Registration successful", ALERT_TYPE.SUCCESS);

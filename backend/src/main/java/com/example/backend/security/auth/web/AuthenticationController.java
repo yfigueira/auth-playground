@@ -25,7 +25,7 @@ public class AuthenticationController {
         return LoginResponseDto.mapper().toDto(response);
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registration")
     public ResponseEntity<?> register(@RequestBody RegistrationRequestDto dto) {
         var registration = RegistrationRequestDto.mapper().toDomain(dto);
         service.create(registration);

@@ -22,7 +22,7 @@
         const response = await post("auth/login/username-password", formData);
 
         if (!response.ok) {
-            let errorResponse = await response.json();
+            let errorResponse = response.json();
             displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
             await goto('/home');
