@@ -2,14 +2,12 @@
     import "../app.css"
     import michael from "$lib/assets/Michael-Jackson.svg"
     import Alert from "./Alert.svelte";
-    import { onMount } from "svelte";
+    import { onMount, beforeUpdate } from "svelte";
     import { goto } from "$app/navigation";
-
-    let token: string = '';
+    import { token } from "../stores/tokenStore";
 
     onMount(async () => {
-        token = localStorage.getItem("token") || '';
-        if (token === '') {
+        if (!$token) {
             await goto("/login");
         }
     });

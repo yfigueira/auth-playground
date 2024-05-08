@@ -4,7 +4,8 @@
     import Input from "$lib/form-elements/Input.svelte";
     import Button from "$lib/form-elements/Button.svelte";
     import {ALERT_TYPE, displayAlert} from "../../../stores/alertStore";
-    import {goto} from "$app/navigation";
+    import { goto } from "$app/navigation";
+    import { login } from "../../../stores/tokenStore";
 
     export let formData: LoginForm;
 
@@ -25,7 +26,7 @@
         if (!response.ok) {
             displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
         } else {
-            localStorage.setItem("token", responseBody.token);
+            login(responseBody.token);
             await goto('/');
         }
     }
