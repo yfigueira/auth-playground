@@ -43,8 +43,6 @@ public class AuthenticationConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers("/users/public").permitAll()
                         .anyRequest().authenticated())
                 .userDetailsService(userAuthenticationService)
                 .oauth2ResourceServer(oauth2 -> oauth2

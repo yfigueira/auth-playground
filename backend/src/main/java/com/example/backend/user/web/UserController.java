@@ -1,8 +1,11 @@
 package com.example.backend.user.web;
 
 import com.example.backend.user.domain.UserService;
+import com.example.backend.user.web.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 
 @RestController
@@ -12,13 +15,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/public")
-    public String publicGreeting() {
-        return "Hello public user";
-    }
-
-    @GetMapping("/private")
-    public String privateGreeting() {
-        return "Hello authenticated user";
+    @GetMapping("/{id}")
+    public UserDto get(@PathVariable UUID id) {
+        var user = userService.get(id);
+        return UserDto.mapper().toDto(user);
     }
 }
