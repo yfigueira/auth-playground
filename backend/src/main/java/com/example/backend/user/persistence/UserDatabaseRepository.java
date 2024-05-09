@@ -5,6 +5,9 @@ import com.example.backend.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Repository
 @RequiredArgsConstructor
 public class UserDatabaseRepository implements UserRepository {
@@ -14,8 +17,8 @@ public class UserDatabaseRepository implements UserRepository {
     private final UserMapper mapper;
 
     @Override
-    public User save(User user) {
-        var saved = entityRepository.save(mapper.toEntity(user));
-        return mapper.toDomain(saved);
+    public Optional<User> get(UUID id) {
+        return entityRepository.findById(id)
+                .map(mapper::toDomain);
     }
 }

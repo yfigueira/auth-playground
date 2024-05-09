@@ -1,23 +1,20 @@
 package com.example.backend.user.domain;
 
+import com.example.backend.user.exception.UserException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
+@Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository repository;
 
-    private final PasswordEncoder encoder;
-
-    public User create(UserRegistration userRegistration) {
-        var user = User.builder()
-                .firstName(userRegistration.firstName())
-                .lastName(userRegistration.lastName())
-                .email(userRegistration.email())
-                .password(encoder.encode(userRegistration.password()))
-                .build();
-
-        return repository.save(user);
+    public User get(UUID id) {
+        return repository.get(id).orElseThrow(
+                () -> UserException.notFound(User.class, id)
+        );
     }
 }
