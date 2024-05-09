@@ -63,6 +63,7 @@
 
 <form class="flex flex-col h-full justify-center items-center gap-8"
       on:submit|preventDefault={handleSubmit}>
+    <span class="text-8xl text-white">Register</span>
     <Input label="First name"
            id="firstname"
            bind:value={formData.firstName}
