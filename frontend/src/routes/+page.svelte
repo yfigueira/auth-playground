@@ -1,15 +1,16 @@
 <script lang="ts">
-    import Button from "$lib/form-elements/Button.svelte";
+    import { userToken } from "../stores/userStore";
+    import Home from "./Home.svelte";
+    import { onMount } from "svelte";
     import { goto } from "$app/navigation";
-    import { token, logout } from "../stores/tokenStore";
 
-    async function handleClick() {
-        logout();
-        await goto("/login");
-    }
+    onMount(async () => {
+        if (!$userToken) {
+            await goto("/login");
+        }
+    });
 </script>
 
-{#if $token}
-    <h1 class="text-white">Home Page</h1>
-    <Button on:click={handleClick}>Logout</Button>
+{#if $userToken}
+    <Home />
 {/if}

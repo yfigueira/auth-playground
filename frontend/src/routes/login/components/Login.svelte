@@ -5,7 +5,7 @@
     import Button from "$lib/form-elements/Button.svelte";
     import {ALERT_TYPE, displayAlert} from "../../../stores/alertStore";
     import { goto } from "$app/navigation";
-    import { login } from "../../../stores/tokenStore";
+    import { login } from "../../../stores/userStore";
 
     export let formData: LoginForm;
 
@@ -21,12 +21,12 @@
         }
 
         const response = await post("auth/login/username-password", formData);
-        const responseBody = await response.json();
+        const data = await response.json();
 
         if (!response.ok) {
-            displayAlert(`[ ${errorResponse.status} ] ${errorResponse.causedBy}`, ALERT_TYPE.DANGER);
+            displayAlert(`[ ${data.status} ] ${data.causedBy}`, ALERT_TYPE.DANGER);
         } else {
-            login(responseBody.token);
+            login(data);
             await goto('/');
         }
     }
