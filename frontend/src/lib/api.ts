@@ -37,3 +37,7 @@ async function send({method, path, data, token}: RequestOptions) {
 export const post = (path: string, data?: {}, token?: string) => {
     return send({method: HttpMethod.POST, path, data, token})
 }
+
+export const get = (path: string, token?: string) => {
+    return send({method: HttpMethod.GET, path, token})
+}
