@@ -139,7 +139,7 @@ public class AuthenticationIT {
     }
 
     @Test
-    void whenRegistered_AuthenticationShouldReturnTokenWithStatus200() {
+    void whenRegistered_AuthenticationShouldReturnIdAndTokenWithStatus200() {
         populateDatabase();
 
         String requestBody = """
@@ -158,7 +158,8 @@ public class AuthenticationIT {
                 .then()
                 .statusCode(200)
                 .body("token", notNullValue())
-                .body("size()", is(1));
+                .body("id", notNullValue())
+                .body("size()", is(2));
 
     }
 

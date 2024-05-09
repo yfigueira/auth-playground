@@ -4,7 +4,10 @@ import com.example.backend.security.auth.domain.LoginResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.UUID;
+
 public record LoginResponseDto(
+        UUID id,
         String token
 ) {
 

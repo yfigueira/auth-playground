@@ -2,17 +2,19 @@ package com.example.backend.security.auth.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class UserAuthentication implements UserDetails {
+
+    private UUID id;
 
     private String username;
 

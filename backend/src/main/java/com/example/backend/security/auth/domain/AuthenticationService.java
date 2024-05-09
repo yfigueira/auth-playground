@@ -29,7 +29,13 @@ public class AuthenticationService {
                 ));
 
         var token = jwtService.generateToken(authentication);
-        return new LoginResponse(token);
+
+        var id = repository.findByUsername(request.username())
+                .map(UserAuthentication.class::cast)
+                .map(UserAuthentication::getId)
+                .get();
+
+        return new LoginResponse(id, token);
     }
 
     public void create(RegistrationRequest request) {
