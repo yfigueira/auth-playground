@@ -41,10 +41,10 @@ To run the project you will need to:
       openssl genrsa -out keypair.pem 2048
 
       # extract public key
-      openssl rsa -in keypair.pem -pubout -out public.pem
+      openssl rsa -in keypair.pem -pubout -out public-key.pem
 
       # create private key in PKCS#8 format
-      openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out private.pem
+      openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out private-key.pem
       ```
   - Once the public and private keys are created, you won't need the *keypair.pem* file anymore, so remove it: `rm keypair.pem`
   - You should now have two files in the *certs* directory - *public.pem* and *private.pem*
@@ -52,6 +52,7 @@ To run the project you will need to:
 - (If you're using WSL on Windows, make sure Docker desktop is running!)
 - Run the database and the server: `docker-compose up --build -d`
 - Navigate to the *frontend* directory: `cd frontend`
+- Install dependencies `npm install`
 - Run the client application: `npm run dev`
 - In your browser, navigate to `http://localhost:5173`
   - Since you won't be authenticated yet, you will be automatically redirected to the login page at `http://localhost:5173/login`
