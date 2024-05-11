@@ -47,7 +47,7 @@ To run the project you will need to:
       openssl pkcs8 -topk8 -inform PEM -outform PEM -nocrypt -in keypair.pem -out private-key.pem
       ```
   - Once the public and private keys are created, you won't need the *keypair.pem* file anymore, so remove it: `rm keypair.pem`
-  - You should now have two files in the *certs* directory - *public.pem* and *private.pem*
+  - You should now have two files in the *certs* directory - *public-key.pem* and *private-key.pem*
 - Navigate back to the project root directory: `cd ../../../../../`
 - (If you're using WSL on Windows, make sure Docker desktop is running!)
 - Run the database and the server: `docker-compose up --build -d`
